@@ -77,12 +77,26 @@ img {
 <pre class="r"><code>training &lt;- read.csv(&quot;pml-training.csv&quot;)
 testing &lt;- read.csv(&quot;pml-testing.csv&quot;)</code></pre>
 <p>Defining the model:<br />In this step I’m creating a model defining the final model using a tree and the “leave out one cross-validation” technique to cross-validate the model.</p>
-<pre class="r"><code>#set.seed(421)
+<pre class="r"><code>set.seed(421)
 #modFit &lt;- train(classe ~ ., method=&quot;rpart&quot;, 
 #                trControl=trainControl(&quot;LOOCV&quot;), data=training)
-#print(modFit$finalModel)
-
-#plot(modFit$finalModel, uniform=TRUE,main=&quot;Variable Classification 
+modFit &lt;- train(classe ~ ., method=&quot;rpart&quot;, 
+                trControl=trainControl(&quot;cv&quot;), data=training)</code></pre>
+<pre><code>## Loading required package: rpart</code></pre>
+<pre class="r"><code>print(modFit$finalModel)</code></pre>
+<pre><code>## n= 406 
+## 
+## node), split, n, loss, yval, (yprob)
+##       * denotes terminal node
+## 
+##  1) root 406 297 A (0.27 0.19 0.17 0.17 0.19)  
+##    2) X&lt; 5594 109   0 A (1 0 0 0 0) *
+##    3) X&gt;=5594 297 218 B (0 0.27 0.24 0.23 0.27)  
+##      6) X&lt; 9372 79   0 B (0 1 0 0 0) *
+##      7) X&gt;=9372 218 139 E (0 0 0.32 0.32 0.36)  
+##       14) X&lt; 16035.5 139  69 C (0 0 0.5 0.5 0) *
+##       15) X&gt;=16035.5 79   0 E (0 0 0 0 1) *</code></pre>
+<pre class="r"><code>#plot(modFit$finalModel, uniform=TRUE,main=&quot;Variable Classification 
 #     Tree&quot;)
 #text(modFit$finalModel,use.n=TRUE,all=TRUE,cex=.8)</code></pre>
 <p>Predicting new values:<br />Using the model defined above, I am predicting the values for each of the 20 cases of the test data set.</p>
